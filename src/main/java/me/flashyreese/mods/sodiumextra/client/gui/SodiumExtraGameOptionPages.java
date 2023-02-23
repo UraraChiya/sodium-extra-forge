@@ -348,7 +348,6 @@ public class SodiumExtraGameOptionPages {
                 .add(OptionImpl.createBuilder(boolean.class, sodiumExtraOpts)
                         .setName(Text.translatable("sodium-extra.option.reduce_resolution_on_mac"))
                         .setTooltip(Text.translatable("sodium-extra.option.reduce_resolution_on_mac.tooltip"))
-                        .setEnabled(MinecraftClient.IS_SYSTEM_MAC)
                         .setImpact(OptionImpact.HIGH)
                         .setControl(TickBoxControl::new)
                         .setBinding((opts, value) -> opts.extraSettings.reduceResolutionOnMac = value, opts -> opts.extraSettings.reduceResolutionOnMac)
