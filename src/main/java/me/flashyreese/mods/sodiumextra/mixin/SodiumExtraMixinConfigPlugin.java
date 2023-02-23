@@ -17,7 +17,6 @@ public class SodiumExtraMixinConfigPlugin extends AbstractCaffeineConfigMixinPlu
                 .addMixinOption("cloud", true)
                 .addMixinOption("compat", true) // Should not allow users to turn this off
                 .addMixinOption("fog", true)
-                .addMixinOption("fog_falloff", true)
                 .addMixinOption("gui", true)
                 .addMixinOption("instant_sneak", true)
                 .addMixinOption("light_updates", true)
@@ -33,8 +32,6 @@ public class SodiumExtraMixinConfigPlugin extends AbstractCaffeineConfigMixinPlu
                 .addMixinOption("sodium", true)
                 .addMixinOption("sodium.accessibility", true)
                 .addMixinOption("sodium.biome_blend", true)
-                .addMixinOption("sodium.fast_random", true)
-                .addMixinOption("sodium.gui_scale", true)
                 .addMixinOption("sodium.resolution", true)
                 .addMixinOption("sodium.scrollable_page", true)
                 .addMixinOption("sodium.vsync", true)

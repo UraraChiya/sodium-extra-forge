@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[34,)"
+loaderVersion = "[41,)"
 license = "LGPLv3"
 issueTrackerURL="https://github.com/dimadencep/sodium-extra-forge/issues"
 
@@ -7,8 +7,8 @@ issueTrackerURL="https://github.com/dimadencep/sodium-extra-forge/issues"
 modId = "sodiumextra"
 version = "${version}"
 displayName = "Rubidium Extra"
+logoFile= "logo.png"
 updateJSONURL="https://api.modrinth.com/updates/rubidium-extra/forge_updates.json"
-logoFile= "icon.png"
 authors = "FlashyReese, dima_dencep"
 displayURL = "https://github.com/dimadencep/sodium-extra-forge"
 description = "Features that shouldn't be in Sodium."
@@ -16,27 +16,20 @@ description = "Features that shouldn't be in Sodium."
 [[dependencies.sodiumextra]]
 modId = "forge"
 mandatory = true
-versionRange = "[34,)"
+versionRange = "[41,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.sodiumextra]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.sodiumextra]]
-modId = "caffeineconfig"
-mandatory = true
-versionRange = "[1.0,)"
+versionRange = "[1.19,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.sodiumextra]]
 modId = "rubidium"
 mandatory = true
-versionRange = "[0.2.10,)"
+versionRange = "[0.6,)"
 ordering = "NONE"
 side = "BOTH"

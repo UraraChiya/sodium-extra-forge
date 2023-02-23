@@ -1,24 +1,24 @@
 package me.flashyreese.mods.sodiumextra.client.render.terrain.color;
 
 import me.jellysquid.mods.sodium.client.model.quad.ModelQuadView;
-import me.jellysquid.mods.sodium.client.model.quad.blender.SmoothBiomeColorBlender;
+import me.jellysquid.mods.sodium.client.model.quad.blender.ColorSampler;
+import me.jellysquid.mods.sodium.client.model.quad.blender.LinearColorBlender;
 import me.jellysquid.mods.sodium.client.util.color.ColorARGB;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.color.block.BlockColorProvider;
+import net.minecraft.state.State;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 
 import java.util.Arrays;
 
-public class LinearFlatColorBlender extends SmoothBiomeColorBlender {
+public class LinearFlatColorBlender extends LinearColorBlender {
     @Override
-    public int[] getColors(BlockColorProvider colorizer, BlockRenderView world, BlockState state, BlockPos origin, ModelQuadView quad) {
-        int[] colors = super.getColors(colorizer, world, state, origin, quad);
+    public <T extends State<O, ?>, O> int[] getColors(BlockRenderView world, BlockPos origin, ModelQuadView quad, ColorSampler<T> sampler, T state) {
+        int[] colors = super.getColors(world, origin, quad, sampler, state);
         Arrays.fill(colors, this.getAverageColor(colors));
         return colors;
     }
 
-    private int getAverageColor(int[] colors) {
+    private <T> int getAverageColor(int[] colors) {
         int a = Arrays.stream(colors).map(ColorARGB::unpackAlpha).sum();
         int r = Arrays.stream(colors).map(ColorARGB::unpackRed).sum();
         int g = Arrays.stream(colors).map(ColorARGB::unpackGreen).sum();

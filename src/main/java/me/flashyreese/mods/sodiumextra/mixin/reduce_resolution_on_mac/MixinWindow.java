@@ -32,7 +32,7 @@ public class MixinWindow {
     private void onDefaultWindowHints() {
         GLFW.glfwDefaultWindowHints();
 
-        if (MinecraftClient.IS_SYSTEM_MAC && SodiumExtraClientMod.options().extraSettings.reduceResolutionOnMac) {
+        if (SodiumExtraClientMod.options().extraSettings.reduceResolutionOnMac) {
             GLFW.glfwWindowHint(GLFW.GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW.GLFW_FALSE);
         }
     }
@@ -40,7 +40,7 @@ public class MixinWindow {
     @Inject(at = @At(value = "RETURN"), method = "updateFramebufferSize")
     private void afterUpdateFrameBufferSize(CallbackInfo ci) {
         // prevents mis-scaled startup screen
-        if (MinecraftClient.IS_SYSTEM_MAC && SodiumExtraClientMod.options().extraSettings.reduceResolutionOnMac) {
+        if (SodiumExtraClientMod.options().extraSettings.reduceResolutionOnMac) {
             framebufferWidth /= 2;
             framebufferHeight /= 2;
         }

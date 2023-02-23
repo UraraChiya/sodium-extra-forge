@@ -9,8 +9,8 @@ import me.jellysquid.mods.sodium.client.gui.options.control.ControlElement;
 import me.jellysquid.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Language;
 
@@ -46,9 +46,9 @@ public class OptionPageScrollFrame extends AbstractFrame {
             }
         }
 
-        this.canScroll = this.dim.getHeight() < y;
+        this.canScroll = this.dim.height() < y;
         if (this.canScroll) {
-            this.scrollBar = new ScrollBarComponent(new Dim2i(this.dim.getLimitX() - 10, this.dim.getOriginY(), 10, this.dim.getHeight()), y, this.dim.getHeight(), this::buildFrame, this.dim);
+            this.scrollBar = new ScrollBarComponent(new Dim2i(this.dim.getLimitX() - 10, this.dim.y(), 10, this.dim.height()), y, this.dim.height(), this::buildFrame, this.dim);
         }
     }
 
@@ -65,7 +65,7 @@ public class OptionPageScrollFrame extends AbstractFrame {
             // Add each option's control element
             for (Option<?> option : group.getOptions()) {
                 Control<?> control = option.getControl();
-                ControlElement<?> element = control.createElement(new Dim2i(this.dim.getOriginX(), this.dim.getOriginY() + y - (this.canScroll ? this.scrollBar.getOffset() : 0), this.dim.getWidth() - (this.canScroll ? 11 : 0), 18));
+                ControlElement<?> element = control.createElement(new Dim2i(this.dim.x(), this.dim.y() + y - (this.canScroll ? this.scrollBar.getOffset() : 0), this.dim.width() - (this.canScroll ? 11 : 0), 18));
                 this.children.add(element);
 
                 // Move down to the next option
@@ -90,7 +90,7 @@ public class OptionPageScrollFrame extends AbstractFrame {
                 .findFirst()
                 .orElse(null);
         matrices.push();
-        this.applyScissor(this.dim.getOriginX(), this.dim.getOriginY(), this.dim.getWidth(), this.dim.getHeight(), () -> super.render(matrices, mouseX, mouseY, delta));
+        this.applyScissor(this.dim.x(), this.dim.y(), this.dim.width(), this.dim.height(), () -> super.render(matrices, mouseX, mouseY, delta));
         matrices.pop();
         if (this.canScroll) {
             this.scrollBar.render(matrices, mouseX, mouseY, delta);
@@ -108,14 +108,16 @@ public class OptionPageScrollFrame extends AbstractFrame {
 
         int boxWidth = 200;
 
-        int boxY = Math.max(dim.getOriginY(), this.dim.getOriginY());
+        int boxY = Math.max(dim.y(), this.dim.y());
         int boxX = this.dim.getLimitX() + boxPadding;
 
         Option<?> option = element.getOption();
-        List<OrderedText> tooltip = new ArrayList<>(MinecraftClient.getInstance().textRenderer.wrapLines(option.getTooltip(), boxWidth - textPadding * 2));
+        List<OrderedText> tooltip = new ArrayList<>(MinecraftClient.getInstance().textRenderer.wrapLines(option.getTooltip(), boxWidth - (textPadding * 2)));
+
         OptionImpact impact = option.getImpact();
+
         if (impact != null) {
-            tooltip.add(Language.getInstance().reorder(new LiteralText(Formatting.GRAY + "Performance Impact: " + impact.toDisplayString())));
+            tooltip.add(Language.getInstance().reorder(Text.translatable("sodium.options.performance_impact_string", impact.getLocalizedName()).formatted(Formatting.GRAY)));
         }
 
         /*if (option.getFlags().contains(OptionFlag.REQUIRES_GAME_RESTART)) {

@@ -1,11 +1,6 @@
 package net.caffeinemc.caffeineconfig;
 
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-//import net.fabricmc.loader.api.FabricLoader;
-//import net.fabricmc.loader.api.ModContainer;
-//import net.fabricmc.loader.api.metadata.CustomValue;
-//import net.fabricmc.loader.api.metadata.CustomValue.CvType;
-//import net.fabricmc.loader.api.metadata.ModMetadata;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,9 +10,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.forgespi.language.IModInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>A mixin configuration object. Holds the {@link Option options} defined and handles overrides.</p>
@@ -49,7 +45,7 @@ public final class CaffeineConfig {
      */
     public static CaffeineConfig.Builder builder(String modName) {
         CaffeineConfig config = new CaffeineConfig(modName);
-        config.logger = LogManager.getLogger(modName + " Config");
+        config.logger = LoggerFactory.getLogger(modName + " Config");
         String jsonKey = modName.toLowerCase() + ":options";
         return config.new Builder().withSettingsKey(jsonKey);
     }
@@ -124,42 +120,39 @@ public final class CaffeineConfig {
             option.setEnabled(enabled, true);
         }
     }
-/*
-    private void applyModOverrides(String jsonKey) {
+
+    /*private void applyModOverrides(String jsonKey) {
         for (IModInfo container : ModList.get().getMods()) {
-            ModInfo meta = container.getModId();
 
-            if (meta.containsCustomValue(jsonKey)) {
-                Object overrides = meta.getCustomValue(jsonKey);
+            if (container.c(jsonKey)) {
+                CustomValue overrides = container.ge(jsonKey);
 
-                if (!(container instanceof Object)) {
-                    logger.warn("Mod '{}' contains invalid {} option overrides, ignoring", meta.getModId(), modName);
+                if (overrides.getType() != CvType.OBJECT) {
+                    logger.warn("Mod '{}' contains invalid {} option overrides, ignoring", meta.getId(), modName);
                     continue;
                 }
 
-                for (Map.Entry<String, Object> entry : overrides.getAsObject()) {
+                for (Map.Entry<String, CustomValue> entry : overrides.getAsObject()) {
                     this.applyModOverride(meta, entry.getKey(), entry.getValue());
                 }
             }
         }
     }
- */
 
-
-    private void applyModOverride(ModInfo meta, String name, Object value) {
+    private void applyModOverride(ModMetadata meta, String name, CustomValue value) {
         Option option = this.options.get(name);
 
         if (option == null) {
-            logger.warn("Mod '{}' attempted to override option '{}', which doesn't exist, ignoring", meta.getModId(), name);
+            logger.warn("Mod '{}' attempted to override option '{}', which doesn't exist, ignoring", meta.getId(), name);
             return;
         }
 
-        if (!(value instanceof Boolean)) {
-            logger.warn("Mod '{}' attempted to override option '{}' with an invalid value, ignoring", meta.getModId(), name);
+        if (value.getType() != CvType.BOOLEAN) {
+            logger.warn("Mod '{}' attempted to override option '{}' with an invalid value, ignoring", meta.getId(), name);
             return;
         }
 
-        boolean enabled = (Boolean) value;
+        boolean enabled = value.getAsBoolean();
 
         // disabling the option takes precedence over enabling
         if (!enabled && option.isEnabled()) {
@@ -167,10 +160,9 @@ public final class CaffeineConfig {
         }
 
         if (!enabled || option.isEnabled() || option.getDefiningMods().isEmpty()) {
-            option.addModOverride(enabled, meta.getModId());
+            option.addModOverride(enabled, meta.getId());
         }
-    }
-
+    }*/
 
     /**
      * Returns the effective option for the specified class name. This traverses the package path of the given mixin

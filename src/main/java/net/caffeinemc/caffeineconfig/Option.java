@@ -2,19 +2,20 @@ package net.caffeinemc.caffeineconfig;
 
 import it.unimi.dsi.fastutil.objects.Object2BooleanLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-
+import org.slf4j.Logger;
 
 /**
  * <p>A config option that can be enabled or disabled.</p>
  * 
- * <p>An option can be toggled by the user setting the name in the config file.</p>
+ * <p>An option can be toggled by the user setting the name in the config file, 
+ * or by a mod by declaring it in their {@code fabric.mod.json} file as a custom
+ * value inside a custom value map with this mod's name.</p>
  *
  */
 public final class Option {

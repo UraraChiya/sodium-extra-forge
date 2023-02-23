@@ -35,26 +35,26 @@ public class ScrollBarComponent extends AbstractWidget {
     }
 
     public void updateThumbPosition() {
-        int scrollThumbLength = (this.viewPortLength * this.dim.getHeight()) / this.frameLength;
+        int scrollThumbLength = (this.viewPortLength * this.dim.height()) / this.frameLength;
         int maximumScrollThumbOffset = this.viewPortLength - scrollThumbLength;
         int scrollThumbOffset = this.offset * maximumScrollThumbOffset / this.maxScrollBarOffset;
-        this.scrollThumb = new Dim2i(this.dim.getOriginX() + 2, this.dim.getOriginY() + 2 + scrollThumbOffset, this.dim.getWidth() - 4, scrollThumbLength - 4);
+        this.scrollThumb = new Dim2i(this.dim.x() + 2, this.dim.y() + 2 + scrollThumbOffset, this.dim.width() - 4, scrollThumbLength - 4);
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.drawRectOutline(this.dim.getOriginX(), this.dim.getOriginY(), this.dim.getLimitX(), this.dim.getLimitY(), 0xFFAAAAAA);
-        this.drawRect(this.scrollThumb.getOriginX(), this.scrollThumb.getOriginY(), this.scrollThumb.getLimitX(), this.scrollThumb.getLimitY(), 0xFFAAAAAA);
+        this.drawRectOutline(this.dim.x(), this.dim.y(), this.dim.getLimitX(), this.dim.getLimitY(), 0xFFAAAAAA);
+        this.drawRect(this.scrollThumb.x(), this.scrollThumb.y(), this.scrollThumb.getLimitX(), this.scrollThumb.getLimitY(), 0xFFAAAAAA);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (this.dim.containsCursor(mouseX, mouseY)) {
             if (this.scrollThumb.containsCursor(mouseX, mouseY)) {
-                this.scrollThumbClickOffset = (int) (mouseY - (this.scrollThumb.getOriginY() + this.scrollThumb.getHeight() / 2));
+                this.scrollThumbClickOffset = (int) (mouseY - (this.scrollThumb.y() + this.scrollThumb.height() / 2));
                 this.isDragging = true;
             } else {
-                int value = (int) ((mouseY - this.dim.getOriginY() - (this.scrollThumb.getHeight() / 2)) / (this.dim.getHeight() - this.scrollThumb.getHeight()) * this.maxScrollBarOffset);
+                int value = (int) ((mouseY - this.dim.y() - (this.scrollThumb.height() / 2)) / (this.dim.height() - this.scrollThumb.height()) * this.maxScrollBarOffset);
                 this.setOffset(value);
                 this.isDragging = false;
             }
@@ -67,7 +67,7 @@ public class ScrollBarComponent extends AbstractWidget {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (this.isDragging) {
-            int value = (int) ((mouseY - this.scrollThumbClickOffset - this.dim.getOriginY() - (this.scrollThumb.getHeight() / 2)) / (this.dim.getHeight() - this.scrollThumb.getHeight()) * this.maxScrollBarOffset);
+            int value = (int) ((mouseY - this.scrollThumbClickOffset - this.dim.y() - (this.scrollThumb.height() / 2)) / (this.dim.height() - this.scrollThumb.height()) * this.maxScrollBarOffset);
             this.setOffset(value);
             return true;
         }

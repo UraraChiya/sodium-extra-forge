@@ -3,28 +3,25 @@ package me.flashyreese.mods.sodiumextra.client.gui;
 import me.flashyreese.mods.sodiumextra.client.SodiumExtraClientMod;
 import net.minecraft.client.font.MultilineText;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 
 public class SuggestRSOScreen extends Screen {
 
-    private static final Text HEADER = new TranslatableText("sodium-extra.suggestRSO.header").formatted(Formatting.BOLD);
-    private static final Text MESSAGE = new TranslatableText("sodium-extra.suggestRSO.message");
-    private static final Text CHECK_MESSAGE = new TranslatableText("multiplayerWarning.check");
-    private static final Text PROCEED_TEXT = HEADER.shallowCopy().append("\n").append(MESSAGE);
+    private static final Text HEADER = Text.translatable("sodium-extra.suggestRSO.header").formatted(Formatting.BOLD);
+    private static final Text MESSAGE = Text.translatable("sodium-extra.suggestRSO.message");
+    private static final Text CHECK_MESSAGE = Text.translatable("multiplayerWarning.check");
     private final Screen prevScreen;
     private CheckboxWidget checkbox;
     private MultilineText lines = MultilineText.EMPTY;
 
     public SuggestRSOScreen(Screen prevScreen) {
-        super(new LiteralText("TexTrue's Rubidium Options Suggestion"));
+        super(Text.literal("TexTrue's Rubidium Options Suggestion"));
         this.prevScreen = prevScreen;
     }
 
@@ -33,23 +30,18 @@ public class SuggestRSOScreen extends Screen {
         super.init();
         this.lines = MultilineText.create(this.textRenderer, MESSAGE, this.width - 50);
         int i = (this.lines.count() + 1) * this.textRenderer.fontHeight * 2;
-        this.addButton(new ButtonWidget(this.width / 2 - 155, 130 + i, 150, 20, new LiteralText("CurseForge"), buttonWidget -> Util.getOperatingSystem().open("https://curseforge.com/minecraft/mc-mods/textrue-rubidium-options")));
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + 160, 130 + i, 150, 20, new LiteralText("Modrinth"), buttonWidget -> Util.getOperatingSystem().open("https://modrinth.com/mod/textrue-rubidium-options")));
-        this.addButton(new ButtonWidget(this.width / 2 - 155, 100 + i, 150, 20, ScreenTexts.PROCEED, buttonWidget -> {
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, 130 + i, 150, 20, Text.literal("CurseForge"), buttonWidget -> Util.getOperatingSystem().open("https://curseforge.com/minecraft/mc-mods/textrues-rubidium-options")));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155 + 160, 130 + i, 150, 20, Text.literal("Modrinth"), buttonWidget -> Util.getOperatingSystem().open("https://modrinth.com/mod/textrues-rubidium-options")));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155, 100 + i, 150, 20, ScreenTexts.PROCEED, buttonWidget -> {
             if (this.checkbox.isChecked()) {
                 SodiumExtraClientMod.options().notificationSettings.hideRSORecommendation = true;
                 SodiumExtraClientMod.options().writeChanges();
             }
-            this.client.openScreen(this.prevScreen);
+            this.client.setScreen(this.prevScreen);
         }));
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + 160, 100 + i, 150, 20, new TranslatableText("menu.quit"), buttonWidget -> this.client.scheduleStop()));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155 + 160, 100 + i, 150, 20, Text.translatable("menu.quit"), buttonWidget -> this.client.scheduleStop()));
         this.checkbox = new CheckboxWidget(this.width / 2 - 155 + 80, 76 + i, 150, 20, CHECK_MESSAGE, false);
-        this.addButton(this.checkbox);
-    }
-
-    @Override
-    public String getNarrationMessage() {
-        return PROCEED_TEXT.getString();
+        this.addDrawableChild(this.checkbox);
     }
 
     @Override

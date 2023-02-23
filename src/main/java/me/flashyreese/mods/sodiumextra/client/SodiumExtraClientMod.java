@@ -1,17 +1,12 @@
 package me.flashyreese.mods.sodiumextra.client;
 
-import me.flashyreese.mods.sodiumextra.client.gui.HudRenderImpl;
 import me.flashyreese.mods.sodiumextra.client.gui.SodiumExtraGameOptions;
-import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.network.FMLNetworkConstants;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 @Mod("sodiumextra")
 @OnlyIn(Dist.CLIENT)
@@ -46,9 +41,6 @@ public class SodiumExtraClientMod {
     }
 
     public SodiumExtraClientMod() {
-        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
-		
         getClientTickHandler().onClientInitialize();
-        new HudRenderImpl().register();
     }
 }

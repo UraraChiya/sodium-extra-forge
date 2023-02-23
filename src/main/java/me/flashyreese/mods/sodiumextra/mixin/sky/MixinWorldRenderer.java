@@ -2,7 +2,7 @@ package me.flashyreese.mods.sodiumextra.mixin.sky;
 
 import me.flashyreese.mods.sodiumextra.client.SodiumExtraClientMod;
 import net.minecraft.client.gl.VertexBuffer;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
@@ -15,72 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {
     @Redirect(
-            method = "renderSky",
+            method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gl/VertexBuffer;bind()V",
+                    target = "Lnet/minecraft/client/gl/VertexBuffer;draw(Lnet/minecraft/util/math/Matrix4f;Lnet/minecraft/util/math/Matrix4f;Lnet/minecraft/client/render/Shader;)V",
                     ordinal = 0
             )
     )
-    public void redirectVertexBufferBind(VertexBuffer instance) {
+    public void redirectSetSkyShader(VertexBuffer instance, Matrix4f viewMatrix, Matrix4f projectionMatrix, Shader shader) {
         if (SodiumExtraClientMod.options().detailSettings.sky) {
-            instance.bind();
-        }
-    }
-
-    @Redirect(
-            method = "renderSky",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/VertexFormat;startDrawing(J)V",
-                    ordinal = 0
-            )
-    )
-    public void redirectVertexFormatStartDrawing(VertexFormat instance, long pointer) {
-        if (SodiumExtraClientMod.options().detailSettings.sky) {
-            instance.startDrawing(pointer);
-        }
-    }
-
-    @Redirect(
-            method = "renderSky",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gl/VertexBuffer;draw(Lnet/minecraft/util/math/Matrix4f;I)V",
-                    ordinal = 0
-            )
-    )
-    public void redirectVertexBufferDraw(VertexBuffer instance, Matrix4f matrix, int mode) {
-        if (SodiumExtraClientMod.options().detailSettings.sky) {
-            instance.draw(matrix, mode);
-        }
-    }
-
-    @Redirect(
-            method = "renderSky",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gl/VertexBuffer;unbind()V",
-                    ordinal = 0
-            )
-    )
-    public void redirectVertexBufferUnbind() {
-        if (SodiumExtraClientMod.options().detailSettings.sky) {
-            VertexBuffer.unbind();
-        }
-    }
-
-    @Redirect(
-            method = "renderSky",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/VertexFormat;endDrawing()V",
-                    ordinal = 0
-            )
-    )
-    public void redirectVertexFormatEndDrawing(VertexFormat instance) {
-        if (SodiumExtraClientMod.options().detailSettings.sky) {
-            instance.endDrawing();
+            instance.draw(viewMatrix, projectionMatrix, shader);
         }
     }
 

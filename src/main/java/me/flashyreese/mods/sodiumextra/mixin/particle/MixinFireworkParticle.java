@@ -1,11 +1,12 @@
 package me.flashyreese.mods.sodiumextra.mixin.particle;
 
-import me.flashyreese.mods.sodiumextra.client.SodiumExtraClientMod;
 import net.minecraft.client.particle.FireworksSparkParticle;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.particle.ParticleTypes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -13,12 +14,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FireworksSparkParticle.FireworkParticle.class)
 public class MixinFireworkParticle {
-    @Unique
-    private final Identifier fireworkIdentifier = new Identifier("minecraft", "firework");
+
+    @Shadow
+    @Final
+    private ParticleManager particleManager;
 
     @Inject(method = "addExplosionParticle", at = @At(value = "HEAD"), cancellable = true)
     public void addExplosionParticle(double x, double y, double z, double velocityX, double velocityY, double velocityZ, int[] colors, int[] fadeColors, boolean trail, boolean flicker, CallbackInfo ci) {
-        if (!SodiumExtraClientMod.options().particleSettings.otherMap.getOrDefault(this.fireworkIdentifier, true) || !SodiumExtraClientMod.options().particleSettings.particles) {
+        if (this.particleManager.addParticle(ParticleTypes.FIREWORK, x, y, z, velocityX, velocityY, velocityZ) == null) {
             ci.cancel();
         }
     }

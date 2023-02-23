@@ -13,25 +13,13 @@ body:
   - type: markdown
     attributes:
       value: "Are you using the latest version of the mod? If not, try updating to see if it resolves your issue. You can [find the latest versions here](https://github.com/dimadencep/sodium-extra-forge/releases)."
-  - type: input
+  - type: dropdown
     id: version-mc
     attributes:
       label: Minecraft version.
-      placeholder: ex. 1.18.2
-    validations:
-      required: true
-  - type: input
-    id: version-rubidium-extra
-    attributes:
-      label: Rubidium Extra version.
-      placeholder: ex. 0.4.8
-    validations:
-      required: true
-  - type: input
-    id: version-rubidium
-    attributes:
-      label: Rubidium version.
-      placeholder: ex. 0.2.8
+      options:
+        - 1.19.2
+        - 1.18.2
     validations:
       required: true
   - type: textarea
